@@ -1,0 +1,213 @@
+\documentclass[a4paper,12pt]{article}
+\input{preamble.tex} % please do not edit the margins of page sizes, etc.
+
+\title{The Foucault Pendulum}
+\date{\today}
+\author{Letizia Govoni, Robyn Matthews, Neha Hans, Adejuwon Adebusuyi}
+
+\begin{document}
+
+% The title page and declaration page do not count towards the 5-page limit
+
+\thispagestyle{empty}
+	\begin{titlepage}
+		\begin{center}
+			\includegraphics[scale=0.99]{images/durham-logo.pdf}
+			\vspace{45mm}
+			
+			\Huge \textbf{The Foucault Pendulum (Group Falcon)}
+			
+			\vspace{15mm}
+			\large
+			\begin{align*}
+				\textit{by} &\quad \text{Letizia Govoni (Collingwood College), Robyn Matthews (St Aidan's College), Neha Hans (Josephine Butler College), Adejuwon Adebusuyi (College) }\\[4mm]
+				\textit{Supervisor} &\quad \text{A. Mathematician}
+			\end{align*}
+			\vspace{35mm}
+			
+			Computational Mathematics II Final Project
+			\vspace{5mm}
+			
+			\today
+		\end{center}
+	\end{titlepage}
+	\normalsize
+\thispagestyle{empty}
+
+    \begin{center}
+		\large\textbf{Plagiarism declaration}
+	\end{center}
+	\begin{quote}
+		This piece of work is a result of my own work and I have complied with the Department’s guidance on multiple submission and on the use of AI tools. Material from the work of others not involved in the project has been acknowledged, quotations and paraphrases suitably indicated, and all uses of AI tools have been declared.
+	\end{quote}
+	
+	We, \textbf{Letizia Govoni, Robyn Matthews, Neha Hans, Adejuwon Adebusuyi} confirm that we have read, understood, and have adhered to the plagiarism declaration above.
+	
+    \begin{center}
+		\large\textbf{AI Usage Declaration}
+	\end{center}
+
+    \begin{itemize}
+    \item ``Co-pilot (GPT-4) was used to edit and correct the code that produced Figure 1.''
+    \item ``Grammarly was used to enhance the writing style, grammar, and spelling of the report throughout.''
+\end{itemize}
+
+    \begin{center}
+		\large\textbf{Author Contribution Statement}
+	\end{center}
+
+    S1, S2, S3 and S4 all jointly wrote and edited the final version of the report. All authors reviewed and ran all code and confirmed all final results presented herein. S1 and S2 led on tasks X and Y, S3 and S4 led on producing figures for tasks W and Z.
+
+    \begin{center}
+		\large\textbf{Link to GitHub Codebase}
+	\end{center}
+    All codes used to produce the analysis and results in this report can be found at our GitHub repository: \href{https://github.com/patterd2/MATH2731_Comp_Math}{https://github.com/patterd2/MATH2731\_Comp\_Math}.
+
+\newpage
+\setcounter{page}{1}
+% Supervisors may suggest particular section structures to suit their project tasks and specifications.
+
+\begin{quote}
+\centering
+"You are invited to see the earth turn." \textit{- Léon Foucault}
+\end{quote}
+
+On the 31st of March 1851, Léon Foucault summoned the scientific minds of Paris to witness what would become his most famous experiment; not the first, but perhaps the simplest and most dramatic proof of the rotation of the earth. An amateur physicist with a flair for theatrics, Foucault suspended a 28 kg weight from a 67 m wire in the Pantheon, and burned through the string fixing it to the wall. A spike at the base of the bob carved out its plane of oscillation in the sand below. As he had predicted, over the next hours the line in the sand appeared to rotate. Remarkably, it was not the pendulum that was turning, but rather the earth beneath it. During this project, we have attempted to use computational techniques to model Foucault's pendulum.
+
+The principles behind Foucault's pendulum are rooted in Newton's Laws of Motion. Newton's first law states a body remains at rest, or in motion at a constant speed in a straight line, unless it is acted upon by a force. As the pendulum is free to move in any direction, it continues to oscillate in the same plane as it began to move in, while the earth rotates beneath it. At small amplitudes where the small angle approximation applies, the motion of the pendulum can be represented by two ODEs \cite{projectguidelines}.
+
+[Task 1]
+
+
+
+[Task 2]
+
+We first study the simpler small-angle model without Earth’s rotation. If we assume very small displacements, it can be shown that the equations for the 2
+degrees of freedom pendulum are:
+\begin{align}
+    \ddot{x} &= -\frac{g}{L}\,x - \gamma \dot{x}, \label{eq:linx}\\[4pt]
+    \ddot{y} &= -\frac{g}{L}\,y - \gamma \dot{y}. \label{eq:liny}
+\end{align}
+where $g = 9.81$ $m/s^{2}$ is the gravitational acceleration at the surface of the Earth, $\gamma$ a
+friction coefficient and m the mass of the pendulum.
+
+In this approximation the two horizontal directions are dynamically independent.  
+For $\gamma = 0$ the solutions are simple harmonic oscillations of natural frequency
+\[
+    \omega_0 = \sqrt{\frac{g}{L}}.
+\]
+
+To solve equations \eqref{eq:linx} and \eqref{eq:liny} numerically
+we write them as 4 first order ordinary differential equations and then apply the Runge-Kutta method to solve this system:
+
+\[
+\dot{x} = v_x ,  \dot{v}_x = -\frac{g}{L}\,x - \gamma v_x ,  \dot{y} = v_y ,  \dot{v}_y = -\frac{g}{L}\,y - \gamma v_y
+\]
+
+This system has the form $\dot{\mathbf{u}} = \mathbf{F}(\mathbf{u})$ with state vector $\mathbf{u} = (x,\,v_x,\,y,\,v_y)$. 
+
+We first consider the initial condition
+$(x,y,\dot{x},\dot{y}) = (1,\,0,\,0,\,0)$, 
+which corresponds to releasing the pendulum at a displacement of 1\,m in the $x$ direction.
+Because the equations are decoupled, the numerical solution shows a purely
+one-dimensional oscillation along the $x$ axis with frequency $\omega_0$. The $y$ motion remains identically zero up to numerical rounding.
+
+\begin{figure}[H] % [H] forces the figure to appear where you place it, otherwise LaTeX will place it where it thinks it fits best
+    \centering
+    \includegraphics[width=0.4\linewidth]{graph_task2_1}
+    \caption{$(x,y)$ trajectory for $(x,y,\dot{x},\dot{y}) = (1,\,0,\,0,\,0)$ and $\gamma=0$}
+    \label{fig:graph_task2_1}
+\end{figure} 
+
+If the starting $y$ component changes, for example to $y = 1$, the trajectory becomes a diagonal segment,
+but there are still no rotations. Indeed the two oscillations on the $x$ and $y$ axis occur independently.
+
+
+
+When the pendulum is given an initial velocity in either direction, 
+for example if
+\[
+    (x,\dot{x},y,\dot{y}) = (1,1,1,0)
+\]
+the trajectory becomes an ellipse.  
+Since the frequencies in the $x$ and $y$ directions are identical, the ellipse 
+remains stationary in the plane, as expected in the absence of Coriolis forces. 
+
+\begin{figure}[H] % [H] forces the figure to appear where you place it, otherwise LaTeX will place it where it thinks it fits best
+    \centering
+    \includegraphics[width=0.4\linewidth]{graph_task2_2}
+    \caption{$(x,y)$ trajectory for $(x,\dot{x},y,\dot{y}) = (1,1,1,0)$ and $\gamma=0$}
+    \label{fig:graph_task2_2}
+\end{figure}
+
+Damping may be introduced by choosing $\gamma > 0$.  
+In this case the amplitude decays exponentially,
+\[
+    A(t) \propto e^{-\gamma t / 2},
+\]
+which is clearly visible in Figure \ref{fig:graph_task2_3}, which has the same initial parameters as Figure \ref{fig:graph_task2_2}, but with $\gamma = 0.1$ . 
+
+\begin{figure}[H] % [H] forces the figure to appear where you place it, otherwise LaTeX will place it where it thinks it fits best
+    \centering
+    \includegraphics[width=0.4\linewidth]{graph_task2_3}
+    \caption{damping}
+    \label{fig:graph_task2_3}
+\end{figure}
+
+If instead we do not assume small displacements, the equations become more complex. This is a plot of a model of these equations for when the pendulum is released from a displacement of x=1 from rest. As we would expect, the pendulum oscillates in the x plane with constant amplitude as no forces are acting upon it.
+
+ \begin{figure}[H]
+ \centering
+ \begin{minipage}[t]{.45\textwidth}
+   \centering
+   \includegraphics[width=.9\linewidth]{plots/task4graph1.pdf}
+   \caption{Plot of a x(t) with initial conditions $x$ = 1, $y$ = 0, $\dot{x} = 0$, $\dot{y} = 0$.}
+   \label{fig:placeholder}
+  \end{minipage}%
+\hspace{0.05\textwidth}
+ \begin{minipage}[t]{.45\textwidth}
+   \centering
+   \includegraphics[width=.9\linewidth]{plots/task4graph2.pdf}
+   \caption{PLot of x and y plane with initial conditions $x$ = 1, $y$ = 0, $\dot{x} = 0$, $\dot{y} = 0$.}
+   \label{fig:placeholder}
+  \end{minipage}
+ \end{figure}
+
+Where the pendulum is instead launched with velocity 0.1 m/s in the x and y direction, the results are similar, except now the pendulum moves in an ellipsis in the x-y plane. The amplitude of x(t) is slightly lower as there is also movement in the y plane.
+
+ \begin{figure}[H]
+ \centering
+ \begin{minipage}[t]{.45\textwidth}
+   \centering
+   \includegraphics[width=.9\linewidth]{plots/task4graph3.pdf}
+   \caption{Plot of a x(t) with initial conditions $x$ = 1, $y$ = 0, $\dot{x} = 0.1$, $\dot{y} = 0.1$.}
+   \label{fig:placeholder}
+  \end{minipage}%
+\hspace{0.05\textwidth}
+ \begin{minipage}[t]{.45\textwidth}
+   \centering
+   \includegraphics[width=.9\linewidth]{plots/task4graph4.pdf}
+   \caption{Plot of x and y plane with initial conditions $x$ = 1, $y$ = 0, $\dot{x} = 0.1$, $\dot{y} = 0.1$.}
+   \label{fig:placeholder}
+  \end{minipage}
+ \end{figure}
+
+The period is not always constant at these larger displacements. Figure \ref{fig:ampplot} shows how the period of oscillations increases with the initial displacement in this model.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{plots/task3graph1.pdf}
+    \caption{Plot of periods for different inital displacements} 
+    \label{fig:ampplot}
+\end{figure}
+
+
+\includegraphics[width=0.5\linewidth]{images/ampdecrease.png}
+
+The amplitude of the pendulum decreases very slowly when considering air resistance. 
+
+\bibliographystyle{abbrv}
+\bibliography{references} % calls references stored in references.bib
+
+
+\end{document}
